@@ -17,8 +17,6 @@
 		<link rel="stylesheet" href="reveal.js/css/reveal.css">
 		<link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme">
 
-	  <link rel="stylesheet" href="deps/editor.css">
-
 
 		<!-- Code syntax highlighting -->
 		<link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
@@ -43,7 +41,7 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>
+				<section id="opening">
 					<h2>Interactive Intro to Rust Lang</h2>
 					<img width="250" height="250" data-src="rust_lang_logo_white.png" style="background:none; border:none; box-shadow:none;"></img>
 					<p>
@@ -51,61 +49,525 @@
 					</p>
 				</section>
 
-				<section>
-					<h2>How This Presentation Works</h2>
-					<p>
-						<b>Technical Answer:</b>
-						Rust was created by Mozilla Research group
-						as a safe, practical, low level language with strong type system and no run time.
+				<section data-markdown id="how_this_presentation_works">
+					<script type="text/template">
+						## How This Presentation Works
+
+						This presentation <i>was</i> going to be interactive.
+						<span class="fragment">However javascript integration is hard...</span>
+						<span class="fragment">and it made the presentation buggy.</span>
+
+						<span class="fragment">
+							As a compromise, each slide has code and a link to
+							<br>[play.rust-lang.org](https://play.rust-lang.org/)
+							where you can try it out.
+						</span>
+					</script>
+				</section>
+
+				<section data-markdown id="how_this_presentation_works_link">
+					<script type="text/template">
+						## How This Presentation Works
+
+						To follow along go to<br>
+						[code-ape.github.io/intro_to_rust_slides](http://code-ape.github.io/intro_to_rust_slides)
+					</script>
+				</section>
+
+				<section data-markdown id="backstory">
+					<script type="text/template">
+						## Backstory
+
+						Rust was created by Mozilla Research group as a safe, practical, low level language with strong type system and no run time.
 						It was first convieved in 2010 and is currently on version 1.2 stable.
-					</p>
-					<p>
-						<b>TL;DR (in my opinion):</b> It's safe C++.
-					</p>
+
+						<span class="fragment">
+							**TL;DR (in my opinion):** It's safe, modern C++.
+						</span>
+					</script>
 				</section>
 
-				<section>
-					<h2>Backstory</h2>
-					<p>
-						<b>Technical Answer:</b>
-						Rust was created by Mozilla Research group
-						as a safe, practical, low level language with strong type system and no run time.
-						It was first convieved in 2010 and is currently on version 1.2 stable.
-					</p>
-					<p>
-						<b>TL;DR (in my opinion):</b> It's safe C++.
-					</p>
+				<section data-markdown id="hello_world">
+					<script type="text/template">
+						## Diving in, Hello World
+
+						```rust
+						// This is the main function
+						fn main() {
+							// Print text to the console
+							println!("Hello World!");
+						}
+						```
+
+						[Try it!](http://is.gd/c469d0)
+					</script>
+				</section>
+
+				<section data-markdown id="a_variable">
+					<script type="text/template">
+						## Variables Intro
+
+						```rust
+						fn main() {
+							let a = 32;
+							println!("a = {}", a);
+						}
+						```
+
+						[Try it!](http://is.gd/U6dKhN)
+					</script>
+				</section>
+
+				<section data-markdown id="a_variable_fail">
+					<script type="text/template">
+						## Variables Intro, Specify Type
+
+						```rust
+						fn main() {
+							let a: f64 = 32;
+							println!("a = {}", a);
+						}
+						```
+
+					</script>
+				</section>
+
+				<section data-markdown id="a_variable_fail_error">
+					<script type="text/template">
+						## Variables Intro, Specify Type
+
+						```rust
+						fn main() {
+							let a: f64 = 32;
+							println!("a = {}", a);
+						}
+						```
+
+						```
+						<anon>:2:15: 2:17 error: mismatched types:
+						 expected `f64`,
+						    found `_`
+						(expected f64,
+						    found integral variable) [E0308]
+						<anon>:2 	let a: f64 = 32;
+						         	             ^~
+						<anon>:2:15: 2:17 help: see the detailed explanation for E0308
+						error: aborting due to previous error
+						```
+
+						[Try it!](http://is.gd/LfapT8)
+					</script>
+				</section>
+
+				<section data-markdown id="a_variable_fail_fixed">
+					<script type="text/template">
+						## Variables Intro, Specify Type
+
+						```rust
+						fn main() {
+							let a: f64 = 32.0;
+							println!("a = {}", a);
+						}
+						```
+
+						[Try it!](http://is.gd/NbAb8t)
+					</script>
+				</section>
+
+				<section data-markdown id="mutating_variables_fail">
+					<script type="text/template">
+						## Mutating Variables
+
+						```rust
+						fn main() {
+							let a = 32;
+							println!("a = {}", a);
+
+							println!("Setting a to 33");
+							a = 33;
+
+							println!("a = {}", a);
+						}
+						```
+					</script>
+				</section>
+
+				<section data-markdown id="mutating_variables_fail_error">
+					<script type="text/template">
+						## Mutating Variables
+
+						```rust
+						fn main() {
+							let a = 32;
+							println!("a = {}", a);
+
+							println!("Setting a to 33");
+							a = 33;
+
+							println!("a = {}", a);
+						}
+						```
+
+						```
+						<anon>:6:2: 6:8 error: re-assignment of immutable variable `a`
+							[E0384]
+						<anon>:6 	a = 33;
+						         	^~~~~~
+						<anon>:2:6: 2:7 note : prior assignment occurs here
+						<anon>:2 	let a = 32;
+						         	    ^
+						error: aborting due to previous error
+						```
+
+						[Try it!](http://is.gd/3y1Lx1)
+					</script>
+				</section>
+
+				<section data-markdown id="mutating_variables_fail_fixed">
+					<script type="text/template">
+						## Mutating Variables
+
+						```rust
+						fn main() {
+							let mut a = 32;
+							println!("a = {}", a);
+
+							println!("Setting a to 33");
+							a = 33;
+
+							println!("a = {}", a);
+						}
+						```
+
+						```nohighlight
+						a = 32
+						Setting a to 33
+						a = 33
+						```
+
+						[Try it!](http://is.gd/bJtYhv)
+					</script>
+				</section>
+
+				<section data-markdown id="blocks">
+					<script type="text/template">
+						## Blocks
+
+						```rust
+						fn main() {
+							let mut a = 32;
+							println!("a = {}", a);
+
+							println!("Setting a to a + a^2");
+							a = {
+								let a_squared = a * a;
+
+								a + a_squared
+							};
+
+							println!("a = {}", a);
+						}
+						```
+
+						```nohighlight
+						a = 32
+						Setting a to a + a^2
+						a = 1056
+						```
+
+						[Try it!](http://is.gd/XTgRiF)
+					</script>
+				</section>
+
+				<section data-markdown id="functions">
+					<script type="text/template">
+						## Functions
+
+						```rust
+						fn value_plus_square(x: i32) -> i32 {
+						    let x_squared = x * x;
+						    x + x_squared
+						}
+
+						fn main() {
+						    let mut a = 32;
+						    println!("a = {}", a);
+
+						    println!("Setting a to a + a^2");
+						    a = value_plus_square(a);
+
+						    println!("a = {}", a);
+						}
+						```
+
+						```nohighlight
+						a = 32
+						Setting a to a + a^2
+						a = 1056
+						```
+
+						[Try it!](http://is.gd/0uC1e7)
+					</script>
 				</section>
 
 
-				<section>
-					<h2>Attempting Rust Code</h2>
-
-
-
-
-<div id="active-code" style="text-align:left">
-<button class="btn btn-primary" type="button" id="run-code" style="font-size:14pt">Run</button>
-<button class="btn btn-primary" type="button" id="reset-code" style="font-size:14pt">Reset</button>
-<div id="editor">// This is a comment, and will be ignored by the compiler
-// You can test this code by clicking the &quot;Run&quot; button over there -&gt;
-// or if prefer to use your keyboard, you can use the &quot;Ctrl + Enter&quot; shortcut
-
-// This code is editable, feel free to hack it!
-// You can always return to the original code by clicking the &quot;Reset&quot; button -&gt;
-
-// This is the main function
-fn main() {
-	// The statements here will be executed when the compiled binary is called
-
-	// Print text to the console
-	println!(&quot;Hello World!&quot;);
-}</div>
-<div id="result" style="font-size:14pt"></div>
-</div>
-
-
+				<section data-markdown id="what_if_we_want_references">
+					<script type="text/template">
+						## But What If We Want To Use References?!
+					</script>
 				</section>
+
+
+				<section data-markdown id="borrowing">
+					<script type="text/template">
+						Crash course in borrowing.
+
+						```rust
+						fn value_plus_square_ref(x: &mut i32) {
+							println!("Mutating value");
+							let a = *x;
+							*x = a*a + a
+						}
+
+						fn main() {
+							let mut x = 32;
+							println!("x = {}", x);
+
+							value_plus_square_ref(&mut x);
+							println!("x = {}", x);
+						}
+						```
+
+						```nohighlight
+						a = 32
+						Setting a to a + a^2
+						a = 1056
+						```
+
+						[Try it!](http://is.gd/wAfa97)
+					</script>
+				</section>
+
+				<section data-markdown id="structs">
+					<script type="text/template">
+						Using `structs`.
+
+						```rust
+						struct Car {
+						    gas: f32,
+						    miles: f32
+						}
+
+						fn main() {
+						    let c = Car {gas: 10.0, miles: 0.0};
+
+						    println!("c = {}", c);
+						}
+						```
+					</script>
+				</section>
+
+				<section data-markdown id="structs_error">
+					<script type="text/template">
+						Using `structs` is hard.
+						```
+						<anon>:9:24: 9:25 error: the trait `core::fmt::Display` is not
+							implemented for the type `Car` [E0277]
+						<anon>:9     println!("c = {}", c);
+						                                ^
+						note: in expansion of format_args!
+						<std macros>:2:25: 2:56 note: expansion site
+						<std macros>:1:1: 2:62 note: in expansion of print!
+						<std macros>:3:1: 3:54 note: expansion site
+						<std macros>:1:1: 3:58 note: in expansion of println!
+						<anon>:9:5: 9:27 note: expansion site
+						<anon>:9:24: 9:25 note: `Car` cannot be formatted with the
+							default formatter; try using `:?` instead if you are using
+							a format string
+						<anon>:9     println!("c = {}", c);
+						                                ^
+						note: in expansion of format_args!
+						<std macros>:2:25: 2:56 note: expansion site
+						<std macros>:1:1: 2:62 note: in expansion of print!
+						<std macros>:3:1: 3:54 note: expansion site
+						<std macros>:1:1: 3:58 note: in expansion of println!
+						<anon>:9:5: 9:27 note: expansion site
+						error: aborting due to previous error
+						```
+
+						[Try it!](http://is.gd/2s6Got)
+					</script>
+				</section>
+
+				<section data-markdown id="structs_error_helpful">
+					<script type="text/template">
+						But the compiler can be helpful.
+						```
+						...
+
+						<anon>:9:24: 9:25 note : `Car` cannot be formatted with the
+							default formatter; try using `:?` instead if you are using
+							a format string
+						<anon>:9     println!("c = {}", c);
+						                                ^
+						...
+						```
+					</script>
+				</section>
+
+				<section data-markdown id="structs2">
+					<script type="text/template">
+						Printing `structs`, take 2.
+
+						```rust
+						struct Car {
+								gas: f32,
+								miles: f32
+						}
+
+						fn main() {
+								let c = Car {gas: 10.0, miles: 0.0};
+
+								println!("c = {:?}", c);
+						}
+						```
+					</script>
+				</section>
+
+				<section data-markdown id="structs2_error">
+					<script type="text/template">
+						Printing `structs`, take 2.
+
+						```
+						<anon>:9:26: 9:27 error: the trait `core::fmt::Debug` is not
+							implemented for the type `Car` [E0277]
+						<anon>:9     println!("c = {:?}", c);
+						                                  ^
+						note: in expansion of format_args!
+						<std macros>:2:25: 2:56 note: expansion site
+						<std macros>:1:1: 2:62 note: in expansion of print!
+						<std macros>:3:1: 3:54 note: expansion site
+						<std macros>:1:1: 3:58 note: in expansion of println!
+						<anon>:9:5: 9:29 note: expansion site
+						<anon>:9:26: 9:27 note: `Car` cannot be formatted using `:?`;
+							if it is defined in your crate, add `#[derive(Debug)]` or
+							manually implement it
+						<anon>:9     println!("c = {:?}", c);
+						                                  ^
+						note: in expansion of format_args!
+						<std macros>:2:25: 2:56 note: expansion site
+						<std macros>:1:1: 2:62 note: in expansion of print!
+						<std macros>:3:1: 3:54 note: expansion site
+						<std macros>:1:1: 3:58 note: in expansion of println!
+						<anon>:9:5: 9:29 note: expansion site
+						error: aborting due to previous error
+						```
+
+						[Try it!](http://is.gd/tz4Mq5)
+					</script>
+				</section>
+
+
+				<section data-markdown id="structs2_error_help">
+					<script type="text/template">
+						Another hint from the compiler.
+
+						```
+						...
+						<anon>:9:26: 9:27 note : `Car` cannot be formatted using `:?`;
+							if it is defined in your crate, add `#[derive(Debug)]` or
+							manually implement it
+						<anon>:9     println!("c = {:?}", c);
+						                                  ^
+						...
+						```
+
+						[Try it!](http://is.gd/tz4Mq5)
+					</script>
+				</section>
+
+				<section data-markdown id="structs3">
+					<script type="text/template">
+						Printing `structs`, take 3.
+
+						```rust
+						#[derive(Debug)]
+						struct Car {
+								gas: f32,
+								miles: f32
+						}
+
+						fn main() {
+								let c = Car {gas: 10.0, miles: 0.0};
+
+								println!("c = {:?}", c);
+						}
+						```
+
+						```nohighlight
+						c = Car { gas: 10, miles: 0 }
+						```
+						[Try it!](http://is.gd/i0Y6Gd)
+					</script>
+				</section>
+
+				<section data-markdown id="structs_method">
+					<script type="text/template">
+						Printing `structs`, the right way.
+
+						```rust
+						use std::fmt;
+
+						struct Car {gas: f32, miles: f32}
+
+						impl fmt::Display for Car {
+						    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+						        write!(f, "Car with {} gallons of gas and {} miles",
+										self.gas, self.miles)
+						    }
+						}
+
+						fn main() {
+								let c = Car {gas: 10.0, miles: 0.0};
+								println!("c = {}", c);
+						}
+						```
+
+						```nohighlight
+						c = Car with 10 gallons of gas and 0 miles
+						```
+						[Try it!](http://is.gd/MasEMZ)
+					</script>
+				</section>
+
+				<section data-markdown id="cool_things">
+					<script type="text/template">
+						Three cool things in this:
+
+						1. Traits
+						```rust
+						impl fmt::Display for Car {
+								...
+						}
+						```
+
+						2. Results
+						```rust
+						fn fmt(...) -> fmt::Result {
+							...
+						}
+						```
+
+						3. Advanced macro
+						```rust
+						write!(f, "Car with {} gallons of gas and {} miles",
+						self.gas, self.miles)
+						```
+					</script>
+				</section>
+
+
+
 
 				<!-- Example of nested vertical slides -->
 				<section>
@@ -132,47 +594,6 @@ fn main() {
 					</section>
 				</section>
 
-				<section>
-					<h2>Slides</h2>
-					<p>
-						Not a coder? Not a problem. There's a fully-featured visual editor for authoring these, try it out at <a href="http://slides.com" target="_blank">http://slides.com</a>.
-					</p>
-				</section>
-
-				<section>
-					<h2>Point of View</h2>
-					<p>
-						Press <strong>ESC</strong> to enter the slide overview.
-					</p>
-					<p>
-						Hold down alt and click on any element to zoom in on it using <a href="http://lab.hakim.se/zoom-js">zoom.js</a>. Alt + click anywhere to zoom back out.
-					</p>
-				</section>
-
-				<section>
-					<h2>Touch Optimized</h2>
-					<p>
-						Presentations look great on touch devices, like mobile phones and tablets. Simply swipe through your slides.
-					</p>
-				</section>
-
-				<section data-markdown>
-					<script type="text/template">
-						## Markdown support
-
-						Write content using inline or external Markdown.
-						Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
-
-						```
-						<section data-markdown>
-						  ## Markdown support
-
-						  Write content using inline or external Markdown.
-						  Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
-						</section>
-						```
-					</script>
-				</section>
 
 				<section>
 					<section id="fragments">
@@ -457,18 +878,6 @@ Reveal.addEventListener( 'customevent', function() {
 				]
 			});
 
-		</script>
-
-		<script src="deps/app.js"></script>
-		<script src="deps/ace.js"></script>
-		<script src="deps/editor.js"></script>
-		<script src="deps/mode-rust.js"></script>
-
-		<script>
-		require(["gitbook"], function(gitbook) {
-				var config = {"fontSettings":{"theme":null,"family":"sans","size":2},"rust-playpen":{}};
-				gitbook.start(config);
-		});
 		</script>
 
 	</body>
