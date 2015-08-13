@@ -672,12 +672,208 @@
 						</script>
 					</section>
 
+					<section data-markdown id="enums_my_option">
+						<script type="text/template">
+							### Enums And Generics
+
+							```rust
+							pub enum MyOption<T> {
+							    None,
+							    Some(T)
+							}
+							```
+							<span class="fragment">*These are not the monads your looking for...*</span>
+
+						</script>
+					</section>
+
+					<section data-markdown id="enums_my_option_example">
+						<script type="text/template">
+							### Enums As Monads
+
+							```rust
+							fn return_option(x: isize) -> MyOption<isize> {
+								if x == 0 {
+									return MyOption::None;
+								} else {
+								    return MyOption::Some(x);
+								}
+							}
+
+							fn main() {
+							    let a = return_option(5);
+							    match a {
+							        MyOption::None => println!("a is None"),
+							        MyOption::Some(i) => println!("a = {}", i),
+							    }
+							}
+							```
+
+							[Try it!](http://is.gd/pQ9YLl)
+
+						</script>
+					</section>
+
+					<section data-markdown id="real_option_example">
+						<script type="text/template">
+							### Enums As Monads
+
+							```rust
+							fn return_option(x: isize) -> Option<isize> {
+								if x == 0 {
+									return None;
+								} else {
+								    return Some(x);
+								}
+							}
+
+							fn main() {
+							    let a = return_option(5);
+							    match a {
+							        None => println!("a is None"),
+							        Some(i) => println!("a = {}", i),
+							    }
+							}
+							```
+
+							[Try it!](http://is.gd/TBZbdL)
+						</script>
+					</section>
+
 				</section>
 
+				<section>
 
-				<section >
+					<section data-markdown id="using_in_python_cpython_repo">
+						<script type="text/template">
+							### Writing a Python Extension in Rust!
+						</script>
+					</section>
+
+
+					<section id="using_in_python_intro">
+						<img data-src="rust_cpython_repo.png" style="background:none; border:none; box-shadow:none;"></img>
+					</section>
+
+
+					<section data-markdown id="using_in_python_example_fib">
+						<script type="text/template">
+							### Fibonacci Extension
+
+							```rust
+							mod fib {
+
+							    pub fn fib(n : u64) -> u64 {
+							        if n < 2 {
+							            return 1
+							        }
+							        let mut prev1 = 1;
+							        let mut prev2 = 1;
+							        for _ in 1..n {
+							            let new = prev1 + prev2;
+							            prev2 = prev1;
+							            prev1 = new;
+							        }
+							        prev1
+							    }
+							}
+							```
+
+						</script>
+					</section>
+
+					<section data-markdown id="using_in_python_example_python_1">
+						<script type="text/template">
+							### Fibonacci Extension
+
+							```rust
+							fn fib<'p>(py: Python<'p>, args: &PyTuple<'p>, kwargs: Option<&PyDict<'p>>)
+									-> PyResult<'p, u64> {
+							    let arg0 = match args.get_item(0).extract::<u64>() {
+							        Ok(x) => x,
+							        Err(_) => {
+							            let msg = "Fib takes a number greater than 0";
+							            let pyerr = PyErr::new_lazy_init(py.get_type::<exc::ValueError>(),
+												Some(msg.to_py_object(py).into_object()));
+							            return Err(pyerr);
+							        }
+							    };
+							    Ok(fib::fib(arg0))
+							}
+							```
+						</script>
+					</section>
+
+
+					<section data-markdown id="using_in_python_example_python_2">
+						<script type="text/template">
+							### Fibonacci Extension
+
+							```rust
+							py_module_initializer!(librust_python_example, |_py, m| {
+									try!(m.add("__doc__", "Calculates fib number in rust"));
+									try!(m.add("fib", py_fn!(fib)));
+									Ok(())
+							});
+							```
+
+							[View it all!](https://github.com/code-ape/rust_python_extension/blob/master/src/lib.rs)
+						</script>
+					</section>
+
+					<section id="rust_python_benchmark_repo">
+						<a href="file:///Users/ferr6343/Code/intro_to_rust_slides/index.html#/using_in_python_example_python_repo">
+							Click on photo to go to repo.
+							<img data-src="rust_python_example_repo.png" style="background:none; border:none; box-shadow:none;"></img>
+						</a>
+					</section>
+
+					<section data-markdown id="rust_python_benchmark">
+						<script type="text/template">
+							### Let's Benchmark it!
+
+							```shell
+							% python try_in_python.py
+							rust fib(30) = 1346269
+							python fib(30) = 2178309
+							rust fib(30) average time: 7.8821182251e-08
+							python fib(30) average time: 1.69672012329e-06
+							rust speedup factor = 21.5261947973
+							Done!
+
+							```
+						</script>
+					</section>
 
 				</section>
+
+				<section>
+
+					<section data-markdown id="closing thoughts">
+						<script type="text/template">
+							### Closing Thoughts
+						</script>
+					</section>
+
+					<section id="closing_thoughts_thinks_left_out">
+						<h2>Things I left Out</h2>
+						<ol>
+							<li>Cargo</li>
+							<li>Traits</li>
+							<li>Macros</li>
+							<li>Arc and Rc</li>
+							<li>Anonymous Functions (aka closures)</li>
+							<li>Modules</li>
+							<li>Features</li>
+						</ol>
+					</section>
+
+				</section>
+			</section>
+
+
+
+
 
 			</div>
 
